@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini AI Query</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input, button { margin: 10px 0; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Ask Your Question</h1>
+    <input type="text" id="query" placeholder="Type your question here..." />
+    <button onclick="sendQuery()">Submit</button>
+    <p id="response"></p>
+
+    <script>
+        async function sendQuery() {
+            const query = document.getElementById('query').value;
+            const responseElement = document.getElementById('response');
+            
+            responseElement.textContent = 'Loading...';
+
+            try {
+                console.log('start');
+                const res = await fetch('/query', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query })
+                });
+                const data = await res.json();
+                console.log(data);
+                responseElement.textContent = data.result || 'No answer found.';
+            } catch (error) {
+                responseElement.textContent = 'Error fetching answer.';
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
